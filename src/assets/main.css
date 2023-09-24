@@ -1,0 +1,9 @@
+@import './base.css';
+
+#app {
+  border: solid 1px #2c3e50;
+  border-radius: 10px;
+  margin: 50px auto;
+  text-align: center;
+  width: min(80vw, 800px);
+}

@@ -1,0 +1,88 @@
+I. Installation :
+-> Install via NPM
+-> npm run dev
+-> Montrer main.ts
+	(transition vers css)
+-> Simplifier le css
+-> Activer typescript au lieu de volar
+
+#########################################################
+
+II. Introduction de l'exemple fil rouge
+
+#########################################################
+
+III. Single Page Components :
+-> Vider le App.vue
+-> Supprimer les composants créés par défaut
+
+	1. template
+	-> Créer le template d'application dans App.vue
+	-> Ajouter le texte "This is the main content" dans <main>
+	-> Créer un nouveau composant task-list-item
+	-> Ajouter une div contenant du texte dans <task-list-item>
+	-> Supprimer le texte "This is the main content" dans <main>
+	-> Ajouter <task-list-item> dans <main> après le texte
+
+	2. script
+	-> Montrer comment le composant est importé dans <script>
+	-> Créer le type Task et une variable contenant une liste vide de type Task[] dans <script>
+
+	3. style
+	-> Ajouter du style aux tags du template
+
+#########################################################
+
+IV. Directives :
+-> Ajouter une <div> après <task-list-item> avec le texte "No task found in this list" dans <main> pour le cas où la liste de tâches est vide
+-> Montrer que cette <div> existe dans le DOM
+
+	1. v-show, v-if, v-else
+	-> Ajouter la directive v-show dans <task-list-item> pour ne l'afficher que lorsque la liste contient au moins une tâche
+	-> Montrer que <task-list-item> existe toujours dans le DOM
+	-> Remplacer la directive v-show par la directive v-if
+	-> Montrer que <task-list-item> n'existe plus dans le DOM
+	-> Ajouter une tâche à la liste
+	-> Montrer que <task-list-item> est de nouveau visible
+	-> Montrer que la <div> est toujours visible, ce qu'on ne souhaite pas
+	-> Ajouter la directive v-else dans la <div> pour ne l'afficher que si la liste est vide
+	-> Montrer que la <div> n'existe plus dans le DOM
+	-> Vider la liste
+	-> Montrer que la <div> existe dans le DOM, mais pas <task-list-item>
+	-> Remettre la tâche dans la liste
+	-> Parler rapidement de la directive v-else-if
+
+	2. v-for
+	-> Ajouter plusieurs tâches à la liste
+	-> Expliquer qu'on souhaite afficher autant de <task-list-item> qu'il existe de tâche dans la liste
+	-> Ajouter la directive v-for dans <task-list-item> pour l'afficher autant de fois qu'il existe de tâche dans la liste
+	-> Montrer que l'élément est affiché autant de fois qu'il existe de tâche dans la liste
+	-> Expliquer que Vue3 recommande de ne pas utiliser v-if avec v-for, même si v-if est désormais prioritaire sur le v-for
+	-> Entourer <task-list-item> par une <div> qui contient le v-if et conserver le v-for dans <task-list-item>
+	-> Expliquer que ":key" est une bonne pratique et qu'il faut prendre l'habitude de l'utiliser (on reviendra dessus plus tard)
+	-> Ajouter ":key" à <task-list-item>
+
+	3. v-bind
+	-> Expliquer qu'on souhaite afficher le titre de la tâche à la place du texte dans <task-list-item>
+	-> Déclarer la props "task" dans le composant <task-list-item>
+	-> Déplacer la déclaration du type "Task" dans un fichier à part pour pouvoir l'utiliser à la fois dans App.vue et dans <task-list-item>
+	-> Montrer la console : "[Vue warn]: Missing required prop: "task"
+	-> Passer la props ":task=task"
+	-> Montrer que le warning a disparu
+	-> Changer <task-list-item> pour afficher la tâche complète (JSON)
+	-> Changer <task-list-item> pour n'afficher que le titre de la tâche
+
+-> Ajouter une classe à la <div> root de <task-list-item>
+-> Ajouter du style à cette <div>
+
+#########################################################
+
+Réactivité :
+-> Ajouter des éléments à la liste de tâches toutes les x secondes
+-> Montrer que la liste de tâches n'est pas réactive
+-> Mettre la liste en ref pour la rendre réactive
+-> Montrer qu'elle est désormais réactive (les nouveaux éléments s'affichent)
+-> Bonus : Parler des variables css
+
+#########################################################
+
