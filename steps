@@ -63,26 +63,73 @@ IV. Directives :
 	-> Ajouter ":key" à <task-list-item>
 
 	3. v-bind
-	-> Expliquer qu'on souhaite afficher le titre de la tâche à la place du texte dans <task-list-item>
-	-> Déclarer la props "task" dans le composant <task-list-item>
-	-> Déplacer la déclaration du type "Task" dans un fichier à part pour pouvoir l'utiliser à la fois dans App.vue et dans <task-list-item>
-	-> Montrer la console : "[Vue warn]: Missing required prop: "task"
-	-> Passer la props ":task=task"
+	-> Créer un nouveau composant <task-list> qui contient le code dans <main>
+	-> Déclarer la props "tasks" dans le composant <task-list>
+	-> Déplacer la déclaration du type "Task" dans un fichier à part pour pouvoir l'utiliser à la fois dans App.vue et dans <task-list>
+	-> Montrer la console : "[Vue warn]: Missing required prop: "tasks"
+	-> Passer la props ":tasks=tasks" au composant <task-list> dans App.vue
 	-> Montrer que le warning a disparu
-	-> Changer <task-list-item> pour afficher la tâche complète (JSON)
-	-> Changer <task-list-item> pour n'afficher que le titre de la tâche
+	-> Ajouter un élément dans la liste tasks de App.vue toutes les x secondes
+	-> Montrer que task n'est pas réactive (la nouvelle tâche n'est pas affichée car Vue n'observe que les éléments qu'on lui dit d'observer)
+	-> Montrer que modifier "props.tasks" dans <task-list> génère un warning (les props sont readonly, i.e: unidirectionnelles)
+	-> Enlever les modifications de "props.tasks"
+	-> Expliquer qu'on souhaite que <task-list-item> affiche le titre de la tâche au lieu du placeholder actuellement affiché
+	-> Déclarer la props "task" dans le composant <task-list-item>
+	-> Passer la props ":task=task" au composant <task-list-item> dans <task-list>
+	-> Afficher dans un premier temps toute la tâche au format JSON pour montrer ce qui est reçu
+	-> N'afficher que le titre de la tâche dans un second temps
+	-> Expliquer qu'on souhaite mettre en place une checkbox qui affiche le statut d'une tâche (complétée ou non complétée)
+	-> Ajouter une checkbox dans <task-list-item> et entourer cette checkbox et le titre de la tâche d'un tag <label>
+	-> Mettre la props ":checked" de la checkbox à "task.completed"
+	-> Montrer que les tâches dont la propriété "completed" est "true" sont désormais cochées et que les autres ne le sont pas
+	-> Ajouter une marge à la checkbox
+	-> Expliquer que les props permettent de passer des informations du composent parent à ses composants enfants
 
+	4. v-on
+	-> Expliquer qu'on souhaite que la checkbox nous permette désormais de contrôler le statut de la tâche
+	-> Déclarer l'événement 'update:task' avec defineEmits<...>() (pas obligatoire mais cela permet la type safety et l'auto-complétion du nom de l'événement dans le composant parent)
+	-> Ajouter un événement @click à la checkbox qui inverse le statut de task (task.completed = !task.completed) et émet l'événement 'update:task'
+	-> Parler des différents événements principaux prédéfinis dans Vue (@click, @mousedown, etc.)
+	-> Ajouter le handler pour l'événement 'update:task' dans <task-list> : le handler doit mettre à jour la tâche et afficher l'afficher dans la console (car rien n'est réactif pour l'instant)
+	-> Expliquer qu'on souhaite montrer le nombre de tâches terminées dans le composant <task-list> (cela permet de confirmer que les tâches de la liste sont bien mises à jour dans <task-list>)
+	-> Remplacer la <div> contenant le v-if dans <task-list> par un fieldset dont la légende indique le nombre de tâches terminées par rapport au nombre total de tâches dans la liste
+	-> Ajouter du style au fieldset pour masquer la border et placer la légende à droite
+	-> Cocher une tâche non complétée ou décocher une tâche complétée
+	-> Montrer que le compteur ne se met pas à jour malgré le fait que la tâche s'affiche bien avec le nouveau statut dans la console
+	-> Expliquer à nouveau que Vue ne détectera pas de changement tant que la liste de tâches ou les tâches qu'elle contient ne seront pas réactives
+	-> Montrer qu'un handler d'événement peut être une fonction définie dans <script>
+	-> Expliquer qu'on peut émettre un événement personnalisé (ou prédéfini) depuis n'importe où dans <script>
+	-> Expliquer que les événements permettent de passer des informations d'un composant enfant à son parent
+
+	5. v-model
+	-> Enlever l'affichage de la tâche dans la console
+	-> Expliquer qu'on souhaiterait ne pas avoir à écrire le passage de la props et le handler de l'événement de mise à jour chaque fois qu'un composant enfant doit pouvoir modifier cette props
+	-> Expliquer que v-model est justement un raccourci prévu pour cela
+	-> Remplacer le passage de la props ":task" et le handler "@update:task" par la directive "v-model:task=task"
+	-> Montrer que "task" n'est pas writable
+	-> Utiliser "tasks[taskIndex]" pour corriger le problème
+	-> Montrer que le compteur ne se met toujours pas à jour lorsqu'on coche ou décoche une checkbox
+	-> Indiquer que le v-model par défaut (lorsque v-model n'est pas suivi d'un ":" et d'un nom de variable) s'applique sur la props "modelValue" et l'événement "update:modelValue"
+
+-> Parler rapidement des modifiers
 -> Ajouter une classe à la <div> root de <task-list-item>
 -> Ajouter du style à cette <div>
 
 #########################################################
 
 Réactivité :
--> Ajouter des éléments à la liste de tâches toutes les x secondes
--> Montrer que la liste de tâches n'est pas réactive
--> Mettre la liste en ref pour la rendre réactive
--> Montrer qu'elle est désormais réactive (les nouveaux éléments s'affichent)
--> Bonus : Parler des variables css
+-> Expliquer qu'on souhaite désormais que le compteur de tâches se mette à jour en fonction des statuts des tâches
+-> Expliquer que pour rendre une variable, un objet ou une liste réactifs, on utilise la fonction "ref()"
+-> Remplacer toutes les tâches de la liste par des référence de tâche
+-> Changer les types Task par Ref<Task> et les types Task[] par Ref<Task>[]
+-> Ajouter "value" après "tasks" ou "task" partout où c'est nécessaire dans <task-list> et <task-list-item>
+-> Montrer que le compteur est devenu réactif
+-> Expliquer que cette méthode, en plus d'être fastidieuse, ne rend pas la liste réactive (i.e.: lorsqu'on ajoute des éléments à la liste toutes les x secondes, les nouvelles tâches ne sont pas affichées)
+-> Montrer qu'une méthode plus simple et plus fonctionnelle est d'utiliser "ref()" directement sur la liste
+-> Enlever tous les "value" qui sont devenus inutiles
+
+-> Bonus : parler des refs vers des composants, i.e.: ref(null)
+-> Bonus : parler des variables css
 
 #########################################################
 

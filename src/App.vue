@@ -2,10 +2,10 @@
 	setup
 	lang="ts"
 >
-import TaskListItem from '@/components/task-list-item.vue'
-import type { Task } from '@/core/types/Task'
+import TaskList from '@/components/task-list.vue'
+import { ref }  from 'vue'
 
-const tasks: Task[] = [
+const tasks = ref([
 	{
 		title: 'Préparer la présentation Vue 3',
 		completed: true
@@ -22,7 +22,14 @@ const tasks: Task[] = [
 		title: 'Faire la présentation',
 		completed: false
 	}
-]
+])
+
+setInterval(() => {
+	tasks.value.push({
+		title: `Title for task n°${ tasks.value.length }`,
+		completed: Math.random() > 0.5
+	})
+}, 1000)
 </script>
 
 <template>
@@ -33,16 +40,7 @@ const tasks: Task[] = [
 	</header>
 	<hr>
 	<main>
-		<div v-if="tasks.length > 0">
-			<task-list-item
-				v-for="(task, taskIndex) in tasks"
-				:key="taskIndex"
-				:task="task"
-			/>
-		</div>
-		<div v-else>
-			No task found in this list.
-		</div>
+		<task-list :tasks="tasks" />
 	</main>
 </template>
 
