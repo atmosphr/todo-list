@@ -23,13 +23,6 @@ const tasks = ref([
 		completed: false
 	}
 ])
-
-setInterval(() => {
-	tasks.value.push({
-		title: `Title for task n°${ tasks.value.length }`,
-		completed: Math.random() > 0.5
-	})
-}, 1000)
 </script>
 
 <template>

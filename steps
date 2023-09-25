@@ -93,7 +93,7 @@ IV. Directives :
 	-> Ajouter le handler pour l'événement 'update:task' dans <task-list> : le handler doit mettre à jour la tâche et afficher l'afficher dans la console (car rien n'est réactif pour l'instant)
 	-> Expliquer qu'on souhaite montrer le nombre de tâches terminées dans le composant <task-list> (cela permet de confirmer que les tâches de la liste sont bien mises à jour dans <task-list>)
 	-> Remplacer la <div> contenant le v-if dans <task-list> par un fieldset dont la légende indique le nombre de tâches terminées par rapport au nombre total de tâches dans la liste
-	-> Ajouter du style au fieldset pour masquer la border et placer la légende à droite
+	-> Ajouter du style au fieldset pour masquer la border et placer la légende à droite et à la légende pour qu'elle permette d'afficher les éléments les uns au dessus des autres
 	-> Cocher une tâche non complétée ou décocher une tâche complétée
 	-> Montrer que le compteur ne se met pas à jour malgré le fait que la tâche s'affiche bien avec le nouveau statut dans la console
 	-> Expliquer à nouveau que Vue ne détectera pas de changement tant que la liste de tâches ou les tâches qu'elle contient ne seront pas réactives
@@ -117,19 +117,65 @@ IV. Directives :
 
 #########################################################
 
-Réactivité :
--> Expliquer qu'on souhaite désormais que le compteur de tâches se mette à jour en fonction des statuts des tâches
--> Expliquer que pour rendre une variable, un objet ou une liste réactifs, on utilise la fonction "ref()"
--> Remplacer toutes les tâches de la liste par des référence de tâche
--> Changer les types Task par Ref<Task> et les types Task[] par Ref<Task>[]
--> Ajouter "value" après "tasks" ou "task" partout où c'est nécessaire dans <task-list> et <task-list-item>
--> Montrer que le compteur est devenu réactif
--> Expliquer que cette méthode, en plus d'être fastidieuse, ne rend pas la liste réactive (i.e.: lorsqu'on ajoute des éléments à la liste toutes les x secondes, les nouvelles tâches ne sont pas affichées)
--> Montrer qu'une méthode plus simple et plus fonctionnelle est d'utiliser "ref()" directement sur la liste
--> Enlever tous les "value" qui sont devenus inutiles
+V. Réactivité :
+	1. refs
+	-> Expliquer qu'on souhaite désormais que le compteur de tâches se mette à jour en fonction des statuts des tâches
+	-> Expliquer que pour rendre une variable, un objet ou une liste réactifs, on utilise la fonction "ref()"
+	-> Remplacer toutes les tâches de la liste par des référence de tâche
+	-> Changer les types Task par Ref<Task> et les types Task[] par Ref<Task>[]
+	-> Ajouter "value" après "tasks" ou "task" partout où c'est nécessaire dans <task-list> et <task-list-item>
+	-> Montrer que le compteur est devenu réactif
+	-> Expliquer que cette méthode, en plus d'être fastidieuse, ne rend pas la liste elle-même réactive
+	-> Montrer que lorsqu'on ajoute des éléments à la liste toutes les x secondes, les nouvelles tâches ne sont pas affichées
+	-> Montrer qu'une méthode plus simple et plus fonctionnelle est d'utiliser "ref()" directement sur la liste
+	-> Enlever tous les "value" qui sont devenus inutiles
+	-> Montrer que la liste devient réactive (i.e.: lorsqu'on ajoute des éléments à la liste toutes les x secondes, les nouvelles tâches sont bien affichées)
+	-> Enlever la fonction qui ajoute des éléments à la liste toutes les x secondes
+	-> Montrer que la fonction "ref()" utilisée sur la liste conserve la réactivité sur ses éléments (deep reactivity)
+	-> Montrer qu'on peut créer des refs sur des variables de n'importe quel type : listes, objets, nombres, booléens, string, etc.
+
+	2. computed
+	-> Expliquer qu'une computed est une fonction dont la valeur n'est recalculée que lorsque l'une des variables réactives qu'elle utilise est modifiée
+	-> Créer une computed "completedTasks" qui retourne la liste des tâches complétées
+	-> Montrer les deux méthodes pour déstructurer les props afin de pouvoir accéder à "tasks" depuis <script>
+	-> Remplacer la première partie de <legend> dans <task-list> par "completedTasks.length"
+	-> Expliquer que puisque les tâches de la liste sont désormais réactives, si leur statut change, la computed sera recalculée
+	-> Créer une computed "progression" qui retourne la string complète indiquant la progression "completedTasks.value.length / tasks.length"
+	-> Expliquer qu'une computed peut faire appel à une autre computed (elle sera recalculée si la valeur de cette computed ou des variables réactives qu'elle utilise est modifiée)
+	-> Remplacer toute le contenu de <legend> par "progress"
+	-> Expliquer qu'on souhaite désormais également afficher le nombre de tâches restantes à compléter
+	-> Créer une nouvelle computed "remainingTasksText" qui retourne la string indiquant le nombre de tâches restantes à compléter à partir de la computed "completedTasks" (i.e.: "tasks.length - completedTasks.value.length")
+	-> Gérer dans cette computed le cas où il n'existe aucune tâche non complétée (afficher "Aucune tâche restante" dans ce cas) ou qu'une tâche restante (pas de "s" à la fin des mots)
+	-> Montrer (avec des console.log) que le calcul de "completedTasks" n'est effectué qu'une seule fois lorsque le statut d'une tâche change, malgré le fait que la computed soit utilisée a deux endroits
+	-> Enlever les console.log
+
+	3. watches
+	-> Expliquer qu'on souhaite à présent implémenter un système de sauvegarde automatique dès qu'un changement est détecté dans la liste ou sur l'une de ses tâches
+	-> Créer pour cela une watch sur la liste
+	-> Montrer avec un console.log que le handler de la watch est appelé dès que le statut d'une tâche est modifiée et / ou lorsqu'une tâche est ajoutée toutes les x secondes à la liste
+	-> Implémenter le handler en simulant un délai
+	-> Créer une ref "const saved = ref(true)"
+	-> Mettre "saved" à false lorsque la sauvegarde est en cours et à true lorsque la sauvegarde est terminée
+	-> Afficher l'état de la sauvegarde ("Sauvegarde..." ou "Sauvegardé.") avec une computed "savedStateText"
+	-> Créer une fonction "save" asynchrone qui remplace le handler actuel de la watch (pour montrer qu'on peut créer et utiliser des fonctions à volonté)
+
+	4. Suppression d'une tâche
+	-> Expliquer qu'on souhaite pouvoir supprimer des tâches
+	-> Ajouter un lien "<a>Supprimer</a>" dans <task-list-item>
+	-> Ajouter du style aux liens et les faire apparaître à droite
+	-> Déclarer l'événement "remove"
+	-> Émettre l'événement "remove" lorsqu'on clique sur le lien de suppression
+	-> Déclarer une fonction "removeTask(taskIndex: number)" dans <task-list> et l'implémenter avec "tasks.splice(taskIndex, 1)"
+	-> Utiliser cette fonction comme handler pour l'événement "remove" de <task-list-item>
+	-> Indiquer qu'il est possible de modifier la props "tasks" (tant qu'on n'écrit pas "tasks = ...") mais que c'est une mauvaise pratique
+	-> Montrer les méthodes recommandées :
+		- Émettre à nouveau l'événement vers App.vue et supprimer l'élément de la liste dans App.vue
+		- Utiliser provide dans App.vue et inject dans <task-list-item> : l'élément fournit par App.vue à <task-list-item> doit alors être une méthode chargée de modifier la liste
 
 -> Bonus : parler des refs vers des composants, i.e.: ref(null)
 -> Bonus : parler des variables css
+
+VI. Méthodes du cycle de vie d'un component
 
 #########################################################
 

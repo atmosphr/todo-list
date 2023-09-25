@@ -10,6 +10,7 @@ defineProps<{
 
 defineEmits<{
 	(event: 'update:task', task: Task): void
+	(event: 'remove'): void
 }>()
 </script>
 
@@ -24,6 +25,7 @@ defineEmits<{
 			>
 			{{ task.title }}
 		</label>
+		<a @click="$emit('remove')">Supprimer</a>
 	</div>
 </template>
 
@@ -33,8 +35,8 @@ defineEmits<{
 	background-color: #2c3e504F;
 	border: solid 1px #2c3e50;
 	border-radius: 100px;
-	margin-bottom: 10px;
-	padding-left: 15px;
+	margin-bottom: 15px;
+	padding: 5px 15px;
 	text-align: left;
 }
 
@@ -44,5 +46,15 @@ defineEmits<{
 
 .checkbox-task-status {
 	margin-right: 5px;
+}
+
+a {
+	color: lightcoral;
+	float: right;
+}
+
+a:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 </style>
