@@ -5,7 +5,7 @@
 import TaskListItem  from '@/components/task-list-item.vue'
 import type { Task } from '@/core/types/Task'
 
-const {tasks} = defineProps<{
+defineProps<{
 	tasks: Task[]
 }>()
 </script>
