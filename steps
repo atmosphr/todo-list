@@ -168,14 +168,41 @@ V. Réactivité :
 	-> Déclarer une fonction "removeTask(taskIndex: number)" dans <task-list> et l'implémenter avec "tasks.splice(taskIndex, 1)"
 	-> Utiliser cette fonction comme handler pour l'événement "remove" de <task-list-item>
 	-> Indiquer qu'il est possible de modifier la props "tasks" (tant qu'on n'écrit pas "tasks = ...") mais que c'est une mauvaise pratique
-	-> Montrer les méthodes recommandées :
-		- Émettre à nouveau l'événement vers App.vue et supprimer l'élément de la liste dans App.vue
-		- Utiliser provide dans App.vue et inject dans <task-list-item> : l'élément fournit par App.vue à <task-list-item> doit alors être une méthode chargée de modifier la liste
+	-> Montrer qu'on peut émettre à nouveau l'événement vers App.vue et supprimer l'élément de la liste depuis App.vue
+	-> Expliquer que cette méthode devient vite fastidieuse lorsque la profondeur de la hiérarchie augmente
+	-> Montrer qu'un moyen plus simple est d'utiliser provide dans App.vue et inject dans <task-list-item> :
+	-> Supprimer les déclarations d'événements pour supprimer une tâche
+	-> L'élément fournit par App.vue à <task-list-item> doit alors être une méthode chargée de modifier la liste (function removeTask(task: Task) { ... })
+	-> Afin de typer le provide / inject, créer la clé "const removeTaskKey = Symbol() as InjectionKey<(task: Task) => void>" dans un fichier .ts
+	-> Utiliser provide(removeTaskKey, removeTask) dans App.vue
+	-> Utiliser "const remove = inject(removeTaskKey)" dans <task-list-item>
+	-> Le type de "remove" sera correctement inféré : "(task:Task) => void"
+	-> Utiliser "remove(task)" comme handler de l'événement "@click" dans <task-list-item>
 
 -> Bonus : parler des refs vers des composants, i.e.: ref(null)
 -> Bonus : parler des variables css
 
 VI. Méthodes du cycle de vie d'un component
 
+	1. onBeforeMount()
+	-> Expliquer que cette méthode est appelée juste avant le premier calcul du rendu du composant et avant qu'il soit monté dans le DOM
+
+	2. onMounted()
+	-> Expliquer que cette méthode est appelée dès que le composant est monté dans le DOM
+	-> Appeler onMounted pour simuler le téléchargement de la liste depuis un serveur
+	-> Montrer que la liste se charge au bout de quelques secondes
+	-> Créer une "const loading = ref(true)" et ajouter un v-if dans le <main> de App.vue pour indiquer que la liste est en cours de chargement
+
+	3. onBeforeUpdate()
+	-> Expliquer que cette méthode est appelée avant la mise à jour du composant (lors d'une modification de variable réactive)
+
+	4. onUpdated()
+	-> Expliquer que cette méthode est appelée juste après la mise à jour du composant (lors d'une modification de variable réactive)
+
+	5. onBeforeUnmount()
+	-> Expliquer que cette méthode est appelée juste avant que le composant soit détaché du DOM (par example lorsqu'un v-if devient faux)
+
+	6. onBeforeUnmount()
+	-> Expliquer que cette méthode est appelée lorsque le composant est détaché du DOM (par example lorsqu'un v-if devient faux)
 #########################################################
 

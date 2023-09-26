@@ -2,7 +2,9 @@
 	setup
 	lang="ts"
 >
-import type { Task } from '@/core/types/Task'
+import { removeTaskKey } from '@/core/provided-keys'
+import type { Task }     from '@/core/types/Task'
+import { inject }        from 'vue'
 
 defineProps<{
 	task: Task
@@ -10,8 +12,9 @@ defineProps<{
 
 defineEmits<{
 	(event: 'update:task', task: Task): void
-	(event: 'remove'): void
 }>()
+
+const remove = inject(removeTaskKey)
 </script>
 
 <template>
@@ -25,7 +28,7 @@ defineEmits<{
 			>
 			{{ task.title }}
 		</label>
-		<a @click="$emit('remove')">Supprimer</a>
+		<a @click="remove(task)">Supprimer</a>
 	</div>
 </template>
 

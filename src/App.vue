@@ -2,27 +2,44 @@
 	setup
 	lang="ts"
 >
-import TaskList from '@/components/task-list.vue'
-import { ref }  from 'vue'
+import TaskList                    from '@/components/task-list.vue'
+import { removeTaskKey }           from '@/core/provided-keys'
+import type { Task }               from '@/core/types/Task'
+import { onMounted, provide, ref } from 'vue'
 
-const tasks = ref([
-	{
-		title: 'Préparer la présentation Vue 3',
-		completed: true
-	},
-	{
-		title: 'Envoyer le code à Eros',
-		completed: true
-	},
-	{
-		title: 'Travailler l\'oral',
-		completed: true
-	},
-	{
-		title: 'Faire la présentation',
-		completed: false
-	}
-])
+const loading = ref(true)
+const tasks = ref([])
+
+onMounted(() => {
+	// Simulate an async request to the server to load the list
+	setTimeout(() => {
+		loading.value = false
+		tasks.value = [
+			{
+				title: 'Préparer la présentation Vue 3',
+				completed: true
+			},
+			{
+				title: 'Envoyer le code à Eros',
+				completed: true
+			},
+			{
+				title: 'Travailler l\'oral',
+				completed: true
+			},
+			{
+				title: 'Faire la présentation',
+				completed: false
+			}
+		]
+	}, 2000)
+})
+
+function removeTask(task: Task) {
+	tasks.value.splice(tasks.value.indexOf(task), 1)
+}
+
+provide(removeTaskKey, removeTask)
 </script>
 
 <template>
@@ -33,7 +50,13 @@ const tasks = ref([
 	</header>
 	<hr>
 	<main>
-		<task-list :tasks="tasks" />
+		<div v-if="loading">
+			Chargement de la liste en cours...
+		</div>
+		<task-list
+			v-else
+			:tasks="tasks"
+		/>
 	</main>
 </template>
 

@@ -45,10 +45,6 @@ function save() {
 		saved.value = true
 	}, 2000)
 }
-
-function removeTask(taskIndex: number) {
-	tasks.splice(taskIndex, 1)
-}
 </script>
 
 <template>
@@ -64,7 +60,6 @@ function removeTask(taskIndex: number) {
 			v-for="(task, taskIndex) in tasks"
 			:key="taskIndex"
 			v-model:task="tasks[taskIndex]"
-			@remove="removeTask(taskIndex)"
 		/>
 	</fieldset>
 	<div v-else>
