@@ -179,6 +179,28 @@ V. Réactivité :
 	-> Le type de "remove" sera correctement inféré : "(task:Task) => void"
 	-> Utiliser "remove(task)" comme handler de l'événement "@click" dans <task-list-item>
 
+	5. Ajout d'une tâche
+	-> Expliquer qu'on souhaite pouvoir ajouter des tâches à la liste
+	-> Entourer le fieldset de <task-list> par une <div> et déplacer le v-if sur cette <div>
+	-> Ajouter un "<button class="btn-new-task">Créer une nouvelle tâche</button>" à cette <div>
+	-> Ajouter du style au <button>
+	-> Ajouter une ref "const creating = ref(false)" dans <task-list>
+	-> N'afficher le <button> que si "creating" est à "false"
+	-> Ajouter un <task-list-item> dans le <fieldset> avec un v-if pour qu'il ne soit affiché que lorsque "creating" est à "true"
+	-> Ajouter une props "creating" dans <task-list-item>
+	-> Modifier <task-list-item> pour qu'il affiche un <input> à la place du titre lorsque "creating" est à "true"
+	-> Créer une computed "title" avec un getter et un setter qui retourne ou modifie "task.title"
+	-> Utiliser la computed "title" comme v-model de l'<input>
+	-> Ajouter un console.log dans le setter de "title" qui affiche le titre
+	-> Montrer que "task.title" est modifié dès qu'on tape du texte
+	-> Expliquer qu'utiliser une computed dans un v-model permet par exemple de valider le champ avant de changer une valeur
+	-> Enlever le console.log
+	-> Afficher deux liens "Annuler" et "Valider" à la place du lien "Supprimer" lorsque "creating" est à "true"
+	-> Créer une fonction "finishEditing(validated: boolean)" appelée lors d'un "@click" sur ces deux liens avec en paramètre "false" et "true" respectivement
+	-> La fonction finishEditing appellera la fonction injectée "add" qui ajoute une tâche à la liste uniquement si "validated" est "true"
+	-> Elle émettra ensuite l'événement 'update:creating' avec le paramètre "false" pour désactiver le mode édition (quelle que soit la valeur de "validated")
+	-> Montrer que tout reste réactif
+
 -> Bonus : parler des refs vers des composants, i.e.: ref(null)
 -> Bonus : parler des variables css
 

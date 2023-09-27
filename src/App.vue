@@ -3,7 +3,7 @@
 	lang="ts"
 >
 import TaskList                    from '@/components/task-list.vue'
-import { removeTaskKey }           from '@/core/provided-keys'
+import {addTaskKey, removeTaskKey} from '@/core/provided-keys'
 import type { Task }               from '@/core/types/Task'
 import { onMounted, provide, ref } from 'vue'
 
@@ -39,7 +39,12 @@ function removeTask(task: Task) {
 	tasks.value.splice(tasks.value.indexOf(task), 1)
 }
 
+function addTask(task: Task) {
+	tasks.value.push(task)
+}
+
 provide(removeTaskKey, removeTask)
+provide(addTaskKey, addTask)
 </script>
 
 <template>
